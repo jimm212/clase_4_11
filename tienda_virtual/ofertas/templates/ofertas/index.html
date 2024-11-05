@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %} OFERTAS {% endblock %}
+{% block content %} 
+
+    <div>
+        <h1>Bienvenidos a la sección de Ofertas</h1>
+    </div>
+
+    <nav>
+        <a href="{% url 'productos:index'  %}">Ir a Productos</a>
+
+        <a href="{% url 'index' %}">Ir a la pagina Principal</a>
+    </nav>
+
+    <div>
+        <h3>Aquí puedes ver la lista de ofertas</h3>
+
+        <ul>
+            {% for oferta in ofertas %}
+                <li>{{ofertas.nombre}}</li>
+            {% empty %}
+                <li>No hay ofertas</li>
+            {% endfor %}
+        </ul>
+        
+        
+    </div>
+
+    <div>
+        <h4>Aquí puedes navegar a las otras app o regresar al inicio</h4>
+        
+        <a href="{% url 'productos:index'  %}">Ir a Productos</a>
+        <br>
+        <a href="{% url 'index' %}">Ir a la pagina Principal</a>
+    </div>
+{% endblock %}
