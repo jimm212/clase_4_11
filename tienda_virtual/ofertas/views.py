@@ -1,11 +1,38 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from datetime import datetime
 from .models import Oferta
 from django.http import Http404
 from .forms import OfertaForm
-
+from django.contrib.auth.decorators import login_required, permission_required
 
 # Create your views here.
+@login_required()
+@permission_required('ofertas.Editar_Ofertas', raise_exception=True)
+def editar_oferta(request, oferta_id):
+    oferta = get_object_or_404(Oferta, id=oferta_id)
+    if request.method == 'POST':
+        form = OfertaForm(request.POST, instance=oferta)
+        if form.is_valid():
+            form.save()
+            return redirect('ofertas:index')
+    else:
+        form = OfertaForm(instance=oferta)
+    return render(request, 'ofertas/crear_oferta.html', {'form': form})
+
+
+@permission_required('ofertas.Eliminar_Ofertas', raise_exception=True)
+def eliminar_oferta(request, ofertas_id):
+    oferta = get_object_or_404(Oferta, id=ofertas_id)
+    
+    if request.method == 'POST':
+        form = OfertaForm(request.POST)
+        if form.is_valid():
+            oferta.delete()
+            return redirect('ofertas:index')
+    return render(request, 'ofertas/eliminar_oferta.html', {'oferta': oferta})
+
+
+@permission_required('ofertas.Crear_Ofertas', raise_exception=True)
 def crear_oferta(request):
     if request.method == 'POST':
         form = OfertaForm(request.POST)
@@ -16,14 +43,12 @@ def crear_oferta(request):
         form = OfertaForm()
     return render(request, 'ofertas/crear_oferta.html', {'form': form})
 
-
 def index (request):
     current_date = datetime.now()
     ofertas = []
     
     try:
-        ofertas = Oferta.objects.filter(fecha_inicio__lte=current_date, 
-                                    fecha_fin__gte=current_date)
+        ofertas = Oferta.objects.filter(fecha_inicio__lte=current_date, fecha_fin__gte=current_date)
         # raise Exception('Error Inesperado')
     
         if not ofertas:
