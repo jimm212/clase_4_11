@@ -19,7 +19,7 @@ def editar_oferta(request, oferta_id):
         form = OfertaForm(instance=oferta)
     return render(request, 'ofertas/crear_oferta.html', {'form': form})
 
-
+@login_required()
 @permission_required('ofertas.Eliminar_Ofertas', raise_exception=True)
 def eliminar_oferta(request, ofertas_id):
     oferta = get_object_or_404(Oferta, id=ofertas_id)
@@ -31,7 +31,7 @@ def eliminar_oferta(request, ofertas_id):
             return redirect('ofertas:index')
     return render(request, 'ofertas/eliminar_oferta.html', {'oferta': oferta})
 
-
+@login_required()
 @permission_required('ofertas.Crear_Ofertas', raise_exception=True)
 def crear_oferta(request):
     if request.method == 'POST':
