@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 # Create your views here.
 @login_required()
-@permission_required('ofertas.Editar_Ofertas', raise_exception=True)
+@permission_required('ofertas.change_oferta', raise_exception=True)
 def editar_oferta(request, oferta_id):
     oferta = get_object_or_404(Oferta, id=oferta_id)
     if request.method == 'POST':
@@ -20,7 +20,7 @@ def editar_oferta(request, oferta_id):
     return render(request, 'ofertas/crear_oferta.html', {'form': form})
 
 @login_required()
-@permission_required('ofertas.Eliminar_Ofertas', raise_exception=True)
+@permission_required('ofertas.delete_oferta', raise_exception=True)
 def eliminar_oferta(request, ofertas_id):
     oferta = get_object_or_404(Oferta, id=ofertas_id)
     
@@ -32,7 +32,7 @@ def eliminar_oferta(request, ofertas_id):
     return render(request, 'ofertas/eliminar_oferta.html', {'oferta': oferta})
 
 @login_required()
-@permission_required('ofertas.Crear_Ofertas', raise_exception=True)
+@permission_required('ofertas.add_oferta', raise_exception=True)
 def crear_oferta(request):
     if request.method == 'POST':
         form = OfertaForm(request.POST)
